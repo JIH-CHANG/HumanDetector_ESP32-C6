@@ -1,0 +1,74 @@
+# ========================================================
+# my_presence_sensor — sdkconfig.defaults
+# Target: ESP32-C6-DevKitC-1
+# Transport: Thread (IEEE 802.15.4, native radio)
+# Matter commissioning: BLE → Thread
+# ========================================================
+
+# ── Matter ──────────────────────────────────────────────
+CONFIG_ESP_MATTER_NODE_TYPE_END_DEVICE=y
+CONFIG_ESP_MATTER_COMMISSIONER_ENABLE=n
+# 不使用 Wi-Fi，只用 Thread，避免 Endpoint 0 衝突
+CONFIG_ESP_MATTER_NETIF_WIFI_ENABLED=n
+
+# ── Thread / OpenThread ──────────────────────────────────
+CONFIG_OPENTHREAD_ENABLED=y
+CONFIG_OPENTHREAD_SRP_CLIENT=y
+CONFIG_OPENTHREAD_DNS_CLIENT=y
+CONFIG_OPENTHREAD_LOG_LEVEL_DYNAMIC=n
+CONFIG_OPENTHREAD_LOG_LEVEL_NOTE=y
+CONFIG_OPENTHREAD_CLI=n
+# ESP32-C6 使用內建 15.4 radio（native mode）
+CONFIG_ESP_OPENTHREAD_NATIVE=y
+CONFIG_ESP_OPENTHREAD_BORDER_ROUTER=n
+CONFIG_ESP_OPENTHREAD_RADIO_SPINEL_UART=n
+CONFIG_ESP_OPENTHREAD_RADIO_SPINEL_SPI=n
+CONFIG_ESP_NETIF_OPENTHREAD_ENABLED=y
+
+# ── Wi-Fi（停用）────────────────────────────────────────
+CONFIG_ENABLE_WIFI_STATION=n
+
+# ── BLE（用於 Matter 配網，配網後可關閉）───────────────
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_EXT_ADV=n
+CONFIG_BT_NIMBLE_HCI_EVT_BUF_SIZE=70
+CONFIG_USE_BLE_ONLY_FOR_COMMISSIONING=n
+
+# ── LwIP / mDNS ─────────────────────────────────────────
+CONFIG_LWIP_IPV6_NUM_ADDRESSES=8
+CONFIG_LWIP_MULTICAST_PING=y
+CONFIG_LWIP_IPV6_AUTOCONFIG=n
+CONFIG_USE_MINIMAL_MDNS=n
+CONFIG_ENABLE_EXTENDED_DISCOVERY=y
+
+# ── OTA ─────────────────────────────────────────────────
+CONFIG_ENABLE_OTA_REQUESTOR=y
+
+# ── Partition ───────────────────────────────────────────
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+# ESP32-C6-DevKitC-1 flash size = 4 MB
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="4MB"
+
+# ── libsodium ───────────────────────────────────────────
+CONFIG_LIBSODIUM_USE_MBEDTLS_SHA=y
+
+# ── Shell（除錯用）──────────────────────────────────────
+CONFIG_ENABLE_CHIP_SHELL=y
+
+# ── BSP：ESP32-C6-DevKitC-1 ─────────────────────────────
+# Button (BOOT = GPIO9, active low)
+CONFIG_BSP_BUTTONS_NUM=1
+CONFIG_BSP_BUTTON_1_TYPE_GPIO=y
+CONFIG_BSP_BUTTON_1_GPIO=9
+CONFIG_BSP_BUTTON_1_LEVEL=0
+CONFIG_BUTTON_PERIOD_TIME_MS=20
+CONFIG_BUTTON_LONG_PRESS_TIME_MS=5000
+# RGB LED (WS2812B = GPIO8, RMT backend)
+CONFIG_BSP_LEDS_NUM=1
+CONFIG_BSP_LED_TYPE_RGB=y
+CONFIG_BSP_LED_RGB_GPIO=8
+CONFIG_BSP_LED_RGB_BACKEND_RMT=y
+CONFIG_MBEDTLS_HKDF_C=y
